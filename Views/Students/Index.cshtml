@@ -1,0 +1,49 @@
+﻿@{
+	ViewData["Title"] = "List of students";
+}
+@model IEnumerable<Student>
+@using MagistriMVC.Controllers
+<h3>List of students</h3>
+<table>
+	<tr>
+		<th>
+			ID
+		</th>
+		<th>
+			First name
+		</th>
+		<th>
+			Last name
+		</th>
+		<th>
+			Date of Birth
+		</th>
+		<th>
+
+		</th>
+	</tr>
+	@foreach (var student in Model) {
+		<tr>
+			<td>
+				@student.Id
+			</td>
+			<td>
+				@student.FirstName
+			</td>
+			<td>
+				@student.LastName
+			</td>
+			<td>
+				@student.DateOfBirth.ToShortDateString()
+			</td>
+			<td>
+				<a class="btn btn-outline-secondary btn-sm" asp-controller="Students" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
+				<a class="btn btn-secondary btn-sm" asp-controller="Students" asp-action="Delete" asp-route-id="@student.Id">Delete</a>
+			</td>
+		</tr>
+	}
+</table>
+<hr />
+<div>
+	<a class="btn btn-success" asp-controller="Students" asp-action="Create">Create a new student</a>
+</div>

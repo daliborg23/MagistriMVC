@@ -1,0 +1,32 @@
+﻿@{
+	ViewData["Title"] = "Create a grade";
+}
+@model GradesViewModel
+<div>
+	<h3>Create a grade</h3>
+	<form asp-action="Create">
+		<div class="form-group">
+			<label class="control-label" asp-for="StudentId">Student Id</label> 
+			<select class="form-control" asp-for="StudentId" asp-items="ViewBag.Students"></select>
+		</div>
+		<div class="form-group">
+			<label class="control-label" asp-for="SubjectId">SubjectId</label>
+			<select class="form-control" asp-for="SubjectId" asp-items="ViewBag.Subjects"></select>
+		</div>
+		<div class="form-group">
+			<label asp-for="What"></label>
+			<input type="text" asp-for="What" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label asp-for="Mark"></label>
+			<input type="text" asp-for="Mark" class="form-control" />
+		</div>
+		@*<div class="form-group">
+			<label asp-for="Date"></label>
+			<input type="date" asp-for="Date" class="form-control" value="@DateTime.Now.ToShortDateString()" hidden/>
+		</div>*@
+		<div>
+			<input class="btn btn-success" type="submit" value="Create" />
+		</div>
+	</form>
+</div>

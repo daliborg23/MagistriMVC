@@ -1,0 +1,19 @@
+﻿@{
+	ViewData["Title"] = "Create a new subject";
+}
+@model Subject
+<div>
+	<h4>Create a new subject</h4>
+	<form asp-action="Create">
+		@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+		<div class="form-group">
+			<label asp-for="Name"></label>
+			<input type="text" asp-for="Name" class="form-control" />
+			@*<span asp-validation-for="FirstName" class="text-danger"></span>*@
+		</div>
+		<div>
+			<input class="btn btn-success" type="submit" value="Create" />
+		</div>
+	</form>
+</div>
+
