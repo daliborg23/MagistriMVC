@@ -3,7 +3,7 @@
 }
 @model IEnumerable<Grade>
 @using MagistriMVC.Controllers
-<h3>List of grades</h3>
+<h4>List of grades</h4>
 <style>
 	
 </style>
@@ -53,13 +53,13 @@
 				@grade.Date.ToShortDateString()
 			</td>
 			<td>
-				<a class="btn btn-outline-secondary btn-sm" asp-controller="Grades" asp-action="Edit" asp-route-id="@grade.Id">Edit</a>
-				<a class="btn btn-secondary btn-sm" asp-controller="Grades" asp-action="Delete" asp-route-id="@grade.Id">Delete</a>
+				<a class="btn btn-sm btn-outline-secondary btn-sm" asp-controller="Grades" asp-action="Edit" asp-route-id="@grade.Id">Edit</a>
+				<a class="btn btn-sm btn-secondary btn-sm" asp-controller="Grades" asp-action="Delete" asp-route-id="@grade.Id">Delete</a>
 			</td>
 		</tr>
 	}
 </table>
 <hr />
 <div>
-	<a class="btn btn-success" asp-controller="Grades" asp-action="Create">Create a new grade</a>
+	<a class="btn btn-sm btn-success" asp-controller="Grades" asp-action="Create">Create a new grade</a>
 </div>

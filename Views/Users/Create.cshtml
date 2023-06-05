@@ -1,0 +1,24 @@
+﻿@{
+	ViewData["Title"] = "CREATE USER";
+}
+@using MagistriMVC.Models;
+@model UserVM
+<h4>Create User</h4>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form method="post">
+	<div class="form-group">
+		<label asp-for="Name"></label>
+		<input asp-for="Name" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Email"></label>
+		<input asp-for="Email" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Password"></label>
+		<input asp-for="Password" class="form-control" />
+	</div>
+	<hr />
+	<button type="submit" class="btn btn-sm btn-success">Create</button>
+	<a asp-action="Index" class="btn btn-sm btn-secondary">Back</a>
+</form>

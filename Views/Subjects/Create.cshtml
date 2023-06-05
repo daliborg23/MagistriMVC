@@ -13,7 +13,12 @@
 		</div>
 		<div>
 			<input class="btn btn-success" type="submit" value="Create" />
+			<a class="btn btn-sm btn-secondary" asp-controller="subjects" asp-action="Index">Cancel</a>
 		</div>
 	</form>
 </div>
-
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}

@@ -51,6 +51,26 @@ namespace MagistriMVC.Services {
 			};
 			return gradesDropdownsData;
 		}
+		public async Task<Grade> GetByIdAsync(int id) {
+			return await dbContext.Grades.Include(x => x.Student).Include(y => y.Subject).FirstOrDefaultAsync(z => z.Id == id);
+		}
+		public async Task UpdateAsync(int id, GradesViewModel updatedGrade) {
+			var dbGrade = await dbContext.Grades.FirstOrDefaultAsync(x => x.Id == updatedGrade.Id);
+			if (dbGrade != null) {
+				dbGrade.Student = dbContext.Students.FirstOrDefault(x => x.Id == updatedGrade.StudentId);
+				dbGrade.Subject = dbContext.Subjects.FirstOrDefault(x => x.Id == updatedGrade.SubjectId);
+				dbGrade.What = updatedGrade.What;
+				dbGrade.Mark = updatedGrade.Mark;
+				dbGrade.Date = updatedGrade.Date;
+			}
+			dbContext.Update(dbGrade);
+			await dbContext.SaveChangesAsync();
+		}
+		public async Task DeleteAsync(int id) {
+			var gradeToDelete = dbContext.Grades.FirstOrDefault(g => g.Id == id);
+			dbContext.Grades.Remove(gradeToDelete);
+			dbContext.SaveChanges();
+		}
 	}
 }
 

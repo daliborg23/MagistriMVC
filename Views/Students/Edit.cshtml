@@ -21,8 +21,10 @@
 			<input type="date" asp-for="DateOfBirth" class="form-control" />
 			@*<span asp-validation-for="DateOfBirth" class="text-danger"></span>*@
 		</div>
+		<hr />
 		<div>
-			<input class="btn btn-success" type="submit" value="Update" />
+			<input class="btn btn-sm btn-success" type="submit" value="Update" />
+			<a class="btn btn-sm btn-secondary" asp-controller="Students" asp-action="Index">Cancel</a>
 		</div>
 	</form>
 </div>

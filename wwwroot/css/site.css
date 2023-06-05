@@ -18,9 +18,6 @@ body {
 }
 th,
 td {
-    border-left: none;
-    border-right: none;
-    border-top: none;
     border-bottom: 1px dotted white;
     padding: 8px;
 }

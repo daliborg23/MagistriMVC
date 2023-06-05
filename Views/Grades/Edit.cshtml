@@ -1,12 +1,12 @@
 ﻿@{
-	ViewData["Title"] = "Create a grade";
+	ViewData["Title"] = "Edit a grade";
 }
 @model GradesViewModel
 <div>
-	<h4>Create a grade</h4>
-	<form asp-action="Create">
+	<h4>Edit a grade</h4>
+	<form asp-action="Edit">
 		<div class="form-group">
-			<label class="control-label" asp-for="StudentId">Student Id</label> 
+			<label class="control-label" asp-for="StudentId">Student Id</label>
 			<select class="form-control" asp-for="StudentId" asp-items="ViewBag.Students"></select>
 		</div>
 		<div class="form-group">
@@ -21,13 +21,13 @@
 			<label asp-for="Mark"></label>
 			<input type="text" asp-for="Mark" class="form-control" />
 		</div>
-		@*<div class="form-group">
-			<label asp-for="Date"></label>
-			<input type="date" asp-for="Date" class="form-control" value="@DateTime.Now.ToShortDateString()" hidden/>
-		</div>*@
-		<hr />
+		<div class="form-group">
+		@*<label asp-for="Date"></label>*@
+		<input type="hidden" asp-for="Date" class="form-control" value="@DateTime.Now.ToShortDateString()" hidden/>
+		</div>
+		<hr	/>
 		<div>
-			<input class="btn btn-sm btn-success" type="submit" value="Create" />
+			<input class="btn btn-sm btn-success" type="submit" value="Save changes" />
 			<a class="btn btn-sm btn-secondary" asp-controller="Grades" asp-action="Index">Cancel</a>
 		</div>
 	</form>
