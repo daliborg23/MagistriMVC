@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MagistriMVC.Models {
     public class UserVM {
@@ -10,6 +11,7 @@ namespace MagistriMVC.Models {
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+
     }
 
 }

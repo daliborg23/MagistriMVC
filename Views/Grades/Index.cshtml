@@ -5,7 +5,7 @@
 @using MagistriMVC.Controllers
 <h4>List of grades</h4>
 <style>
-	
+
 </style>
 
 <table>
@@ -28,9 +28,11 @@
 		<th style="width:100px;">
 			Date
 		</th>
-		<th>
+		@if (User.IsInRole("Admin") || User.IsInRole("Director") || User.IsInRole("Teacher")) {
+			<th>
 
-		</th>
+			</th>
+		}
 	</tr>
 	@foreach (var grade in Model) {
 		<tr>
@@ -53,13 +55,17 @@
 				@grade.Date.ToShortDateString()
 			</td>
 			<td>
-				<a class="btn btn-sm btn-outline-secondary btn-sm" asp-controller="Grades" asp-action="Edit" asp-route-id="@grade.Id">Edit</a>
-				<a class="btn btn-sm btn-secondary btn-sm" asp-controller="Grades" asp-action="Delete" asp-route-id="@grade.Id">Delete</a>
+				@if (User.IsInRole("Admin") || User.IsInRole("Director") || User.IsInRole("Teacher")) {
+					<a class="btn btn-sm btn-outline-secondary btn-sm" asp-controller="Grades" asp-action="Edit" asp-route-id="@grade.Id">Edit</a>
+					<a class="btn btn-sm btn-secondary btn-sm" asp-controller="Grades" asp-action="Delete" asp-route-id="@grade.Id">Delete</a>
+				}
 			</td>
 		</tr>
 	}
 </table>
 <hr />
-<div>
-	<a class="btn btn-sm btn-success" asp-controller="Grades" asp-action="Create">Create a new grade</a>
-</div>
+@if (User.IsInRole("Admin") || User.IsInRole("Director") || User.IsInRole("Teacher")) {
+	<div>
+		<a class="btn btn-sm btn-success" asp-controller="Grades" asp-action="Create">Create a new grade</a>
+	</div>
+}

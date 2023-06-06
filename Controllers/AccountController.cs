@@ -13,7 +13,11 @@ namespace MagistriMVC.Controllers {
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
-        [AllowAnonymous] 
+		[AllowAnonymous]
+		public IActionResult AccessDenied() {
+			return View();
+		}
+		[AllowAnonymous] 
         public IActionResult Login(string returnUrl) {
             LoginVM loginVM = new LoginVM();
             loginVM.ReturnUrl = returnUrl;
@@ -42,5 +46,8 @@ namespace MagistriMVC.Controllers {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-    }
+		public async Task<IActionResult> Index() {
+			return View();
+		}
+	}
 }

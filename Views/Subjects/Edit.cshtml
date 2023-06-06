@@ -4,17 +4,14 @@
 @model Subject
 <div>
 	<h4>Edit a subject</h4>
-	<form asp-action="Edit">
-		@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+	<div asp-validation-summary="All" class="text-danger"></div>
+	<form asp-action="Edit" method="post">
 		<div class="form-group">
 			<label asp-for="Name"></label>
 			<input type="text" asp-for="Name" class="form-control" />
-			@*<span asp-validation-for="FirstName" class="text-danger"></span>*@
 		</div>
 		<hr />
-		<div>
-			<input class="btn btn-sm btn-success" type="submit" value="Update" />
-			<a class="btn btn-sm btn-secondary" asp-controller="subjects" asp-action="Index">Cancel</a>
-		</div>
+		<button type="submit" class="btn btn-sm btn-success">Update</button>
+		<a asp-action="Index" class="btn btn-sm btn-secondary">Cancel</a>
 	</form>
 </div>

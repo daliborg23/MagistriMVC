@@ -18,7 +18,11 @@
 		<label asp-for="Password"></label>
 		<input asp-for="Password" class="form-control" />
 	</div>
+	@*<div class="form-group">
+		<label class="control-label" asp-for="SubjectId">SubjectId</label>
+		<select class="form-control" asp-for="SubjectId" asp-items="ViewBag.Subjects"></select>
+	</div>*@
 	<hr />
 	<button type="submit" class="btn btn-sm btn-success">Create</button>
-	<a asp-action="Index" class="btn btn-sm btn-secondary">Back</a>
+	<a asp-action="Index" class="btn btn-sm btn-secondary">Cancel</a>
 </form>

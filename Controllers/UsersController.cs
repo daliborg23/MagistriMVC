@@ -1,17 +1,22 @@
 ﻿using MagistriMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MagistriMVC.Controllers {
+    [Authorize(Roles = "Admin,Director")]
     public class UsersController : Controller {
         private UserManager<AppUser> userManager;
-        private IPasswordHasher<AppUser> passwordHasher;
+		private RoleManager<IdentityRole> rolesManager;
+		private IPasswordHasher<AppUser> passwordHasher;
         private IPasswordValidator<AppUser> passwordValidator;
-        public UsersController(UserManager<AppUser> userManager, IPasswordHasher<AppUser> passwordHasher, IPasswordValidator<AppUser> passwordValidator) {
+        public UsersController(UserManager<AppUser> userManager, RoleManager<IdentityRole> rolesManager, IPasswordHasher<AppUser> passwordHasher, IPasswordValidator<AppUser> passwordValidator) {
             this.userManager = userManager;
             this.passwordHasher = passwordHasher;
             this.passwordValidator = passwordValidator;
-        }
+			this.rolesManager = rolesManager;
+		}
         public IActionResult Index() {
             return View(userManager.Users);
         }
@@ -25,9 +30,9 @@ namespace MagistriMVC.Controllers {
                     UserName = user.Name,
                     Email = user.Email
                 };
-                // pokus o zapis do db
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
                 if (result.Succeeded) {
+                    //await userManager.AddToRoleAsync(appUser, "Admin");
                     return RedirectToAction("Index");
                 }
                 else {
@@ -39,13 +44,15 @@ namespace MagistriMVC.Controllers {
         }
         public async Task<IActionResult> Edit(string id) {
             AppUser userToEdit = await userManager.FindByIdAsync(id);
-            if (userToEdit == null)
+			ViewBag.Roles = new SelectList(rolesManager.Roles);
+            ViewBag.AssignedRole = await userManager.GetRolesAsync(userToEdit);
+			if (userToEdit == null)
                 return View("NotFound");
             else
                 return View(userToEdit);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, string email, string password) {
+        public async Task<IActionResult> Edit(string id, string email, string password, string role) {
             AppUser user = await userManager.FindByIdAsync(id);
             if (user != null) {
                 if (!string.IsNullOrEmpty(email))
@@ -59,19 +66,37 @@ namespace MagistriMVC.Controllers {
                         user.PasswordHash = passwordHasher.HashPassword(user, password); 
                     }
                     else {
-                        Errors(validPass);
+                        //Errors(validPass);
                     }
                 }
-                else
-                    ModelState.AddModelError("", "Password cannot be empty");
-                if (!string.IsNullOrEmpty(email) && validPass.Succeeded) {
+                else {
+                    // mozna zrusim at se pri prazdnem heslu necha stare?
+                    //ModelState.AddModelError("", "Password cannot be empty");
+                }
+				if (!string.IsNullOrEmpty(role)) {
+					if (role == "delete") {
+						var userRoles = await userManager.GetRolesAsync(user);
+						if (userRoles.Count > 0) {
+							foreach (var userRole in userRoles) {
+								await userManager.RemoveFromRoleAsync(user, userRole);
+							}
+						}
+					}
+					else {
+						if (!await userManager.IsInRoleAsync(user, role)) {
+							await userManager.AddToRoleAsync(user, role);
+						}
+					}
+				}
+				if (!string.IsNullOrEmpty(email) && (string.IsNullOrEmpty(password) || validPass.Succeeded)) {
                     IdentityResult result = await userManager.UpdateAsync(user);
-                    if (result.Succeeded)
+                    if (result.Succeeded) {
                         return RedirectToAction("Index");
+                    }
                     else
                         Errors(result);
                 }
-            }
+			}
             else
                 ModelState.AddModelError("", "User Not Found");
             return View(user);

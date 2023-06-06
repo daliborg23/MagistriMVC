@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MagistriMVC.Controllers {
-    [Authorize]
+    [Authorize(Roles = "Admin,Teacher,Director")]
     public class StudentsController : Controller {
         public StudentsService service;
         public StudentsController(StudentsService service) {

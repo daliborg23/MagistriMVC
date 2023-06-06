@@ -1,26 +1,50 @@
 ﻿@model AppUser
 @{
-    ViewData["Title"] = "UPDATE USER";
+	ViewData["Title"] = "UPDATE USER";
 }
 <h4>Update User</h4>
-<a asp-action="Index" class="btn btn-secondary">Back</a>
 <div asp-validation-summary="All" class="text-danger"></div>
 <form asp-action="Edit" method="post">
-    <div class="form-group">
-        <label asp-for="Id"></label>
-        <input asp-for="Id" class="form-control" disabled />
-    </div>
-    <div class="form-group">
-        <label asp-for="UserName"></label>
-        <input asp-for="UserName" class="form-control" disabled />
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input name="password" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+	<div class="form-group">
+		<label asp-for="Id"></label>
+		<input asp-for="Id" class="form-control" disabled />
+	</div>
+	<div class="form-group">
+		<label asp-for="UserName"></label>
+		<input asp-for="UserName" class="form-control" disabled />
+	</div>
+	<div class="form-group">
+		<label asp-for="Email"></label>
+		<input asp-for="Email" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="password">Password</label>
+		<input name="password" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="selectedRole">Role</label>
+		<select id="selectedRole" name="role" class="form-control">
+			<option value="">Select Role</option>
+			@foreach (var role in ViewBag.Roles) {
+				<option value="@role.Text">@role.Text</option>
+			}
+			<option disabled>───────────</option>
+			<option value="delete">Delete all Roles</option>
+		</select>
+	</div>
+	<br />
+	<p>Assigned role:
+		@{
+			if (ViewBag.AssignedRole.Count > 0)
+				foreach (var role in ViewBag.AssignedRole) {
+					<span>@role.ToString() </span>
+				}
+			else {
+				<span>no role assigned</span>
+			}
+		}
+	</p>
+	<hr />
+	<a asp-action="Index" class="btn btn-sm btn-secondary">Back</a>
+	<button type="submit" class="btn btn-sm btn-success">Save</button>
 </form>

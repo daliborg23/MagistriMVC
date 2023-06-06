@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Edit a role";
+}
+@model string
+<div>
+	<h4>Edit a role</h4>
+	<form asp-action="Edit">
+		@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+		<div class="form-group">
+			<label for="roleedit"></label>
+			<input type="text" name="roleedit" class="form-control" />
+			@*<span asp-validation-for="FirstName" class="text-danger"></span>*@
+		</div>
+		<hr />
+		<div>
+			<input class="btn btn-sm btn-success" type="submit" value="Update" />
+			<a class="btn btn-sm btn-secondary" asp-controller="roles" asp-action="Index">Cancel</a>
+		</div>
+	</form>
+</div>
