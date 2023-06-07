@@ -20,10 +20,12 @@ namespace MagistriMVC.Controllers {
         public IActionResult Index() {
             return View(userManager.Users);
         }
+        [AllowAnonymous]
         public IActionResult Create() {
             return View();
         }
-        [HttpPost]
+		[AllowAnonymous] // pridat automaticky aspon studentskou roli?
+		[HttpPost]
         public async Task<IActionResult> Create(UserVM user) {
             if (ModelState.IsValid) {
                 AppUser appUser = new AppUser {

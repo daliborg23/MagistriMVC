@@ -1,4 +1,7 @@
-﻿@model LoginVM
+﻿@{
+    ViewData["Title"] = "Login";
+}
+@model LoginVM
 <h4>Login</h4>
 <div class="text-danger" asp-validation-summary="All"></div>
 <form asp-action="Login" method="post">
