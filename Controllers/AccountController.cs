@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace MagistriMVC.Controllers {
     [Authorize]
@@ -18,7 +20,7 @@ namespace MagistriMVC.Controllers {
 			return View();
 		}
 		[AllowAnonymous] 
-        public IActionResult Login(string returnUrl) {
+        public IActionResult Login(string? returnUrl) { // tohle musim predelat
             LoginVM loginVM = new LoginVM();
             loginVM.ReturnUrl = returnUrl;
             return View(loginVM);
@@ -26,21 +28,35 @@ namespace MagistriMVC.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginVM login) {
+        public async Task<IActionResult> Login([FromForm]LoginVM login) {
             if (ModelState.IsValid) {
                 AppUser appUser = await userManager.FindByNameAsync(login.UserName);
                 if (appUser != null) {
                     await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser,
+                    Microsoft.AspNetCore.Identity.SignInResult signInResult = await signInManager.PasswordSignInAsync(appUser,
                     login.Password, login.Remember, false);
-                    if (result.Succeeded) {
-                        return Redirect(login.ReturnUrl ?? "/"); // ??
+                    // captcha
+                    var httpClient = new HttpClient();
+			        var secretKey = "6LfdUHYmAAAAAMers_lg0PXVC-OeLh0LpmnKAZXz";
+			        var url = $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={login.recaptchaResponse}";
+			        var response = await httpClient.GetAsync(url);
+			        if (!response.IsSuccessStatusCode) {
+				        return BadRequest("reCAPTCHA verification failed.");
+			        }
+			        dynamic jsonResult = await response.Content.ReadAsStringAsync();
+			        var recaptcha = JsonConvert.DeserializeObject<RecaptchaResponse>(jsonResult);
+			        if (!recaptcha.success) {
+				        return BadRequest("reCAPTCHA validation failed.");
+			        }
+
+                    if (signInResult.Succeeded) {
+                        //return Redirect(login.ReturnUrl ?? "/"); // ??
+                        return Redirect(login.ReturnUrl ?? "/"); 
                     }
                 }
                 ModelState.AddModelError(nameof(login.UserName), "Login Failed: Invalid UserName or password");
-                
             }
-            return View(login);
+			return View("Login",login);
         }
         public async Task<IActionResult> Logout() {
             await signInManager.SignOutAsync();

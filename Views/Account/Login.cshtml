@@ -1,23 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "Login";
+	ViewData["Title"] = "Login";
 }
 @model LoginVM
+@Html.AntiForgeryToken()
 <h4>Login</h4>
 <div class="text-danger" asp-validation-summary="All"></div>
-<form asp-action="Login" method="post">
-    <input type="hidden" asp-for="ReturnUrl" />
-    <div class="form-group">
-        <label asp-for="UserName"></label>
-        <input asp-for="UserName" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="rememberme">Remember me?</label>
-        <input id="rememberme" type="checkbox" asp-for="Remember" />
-    </div>
-    <hr />
-    <button class="btn btn-sm btn-success" type="submit">Log In</button>
+<form id="loginForm" asp-action="Login" method="post" enctype="multipart/form-data" onsubmit="event.preventDefault(); onSubmit(grecaptcha.getResponse());">
+	<input type="hidden" asp-for="ReturnUrl" />
+	<div class="form-group">
+		<label asp-for="UserName"></label>
+		<input asp-for="UserName" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label asp-for="Password"></label>
+		<input asp-for="Password" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="rememberme">Remember me?</label>
+		<input id="rememberme" type="checkbox" asp-for="Remember" />
+	</div>
+	<div class="g-recaptcha" id="recaptcha" data-sitekey="6LfdUHYmAAAAAK0x8p0XXr9Et1WfhR1E9EYyTW1P" data-theme="dark"></div>
+	<input type="hidden" id="recaptchaResponse" name="recaptchaResponse" />
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script>
+		function onSubmit(token) {
+			document.getElementById("recaptchaResponse").value = token;
+			document.getElementById("loginForm").submit();
+		}
+	</script>
+	<br />
+	<hr />
+	<button class="btn btn-sm btn-success" type="submit">Log In</button>
 </form>

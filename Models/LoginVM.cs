@@ -8,5 +8,7 @@ namespace MagistriMVC.Models {
         public string Password { get; set; }
         public string? ReturnUrl { get; set; }
         public bool Remember { get; set; }
-    }
+		[Required]
+		public string recaptchaResponse { get; set; }
+	}
 }
