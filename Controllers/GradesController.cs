@@ -15,7 +15,8 @@ namespace MagistriMVC.Controllers {
 			var allGrades = await service.GetAllAsync();
 			return View(allGrades);
 		}
-		public async Task<IActionResult> Create() {
+        [Authorize(Roles = "Admin,Teacher,Director")]
+        public async Task<IActionResult> Create() {
 			var gradesDropdownsData = await service.GetNewGradesDropdownsValues();
 			ViewBag.Students = new SelectList(gradesDropdownsData.Students, "Id", "LastName");
 			ViewBag.Subjects = new SelectList(gradesDropdownsData.Subjects, "Id", "Name");
@@ -33,7 +34,8 @@ namespace MagistriMVC.Controllers {
 			await service.CreateAsync(newGrade);
 			return RedirectToAction("Index");
 		}
-		public async Task<IActionResult> Edit(int id) {
+        [Authorize(Roles = "Admin,Teacher,Director")]
+        public async Task<IActionResult> Edit(int id) {
 			var gradeToEdit = await service.GetByIdAsync(id);
 			ViewData["Id"] = id;
 			ViewData["Something"] = service.GetType();
@@ -59,7 +61,8 @@ namespace MagistriMVC.Controllers {
 			await service.UpdateAsync(id, updatedGrade);
 			return RedirectToAction("Index");
 		}
-		public async Task<IActionResult> DeleteAsync(int id) {
+        [Authorize(Roles = "Admin,Teacher,Director")]
+        public async Task<IActionResult> DeleteAsync(int id) {
 			await service.DeleteAsync(id);
 			return RedirectToAction("Index");
 		}

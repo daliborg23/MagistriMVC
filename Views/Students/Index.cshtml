@@ -47,3 +47,18 @@
 <div>
 	<a class="btn btn-sm btn-success" asp-controller="Students" asp-action="Create">Create a new student</a>
 </div>
+<hr />
+@if (User.IsInRole("Admin") || User.IsInRole("Director") || User.IsInRole("Teacher")) {
+	<h4>Upload students list [.XML files]</h4>
+	<form method="post" enctype="multipart/form-data" asp-controller="FileUpload" asp-action="Upload">
+		<div class="form-group">
+			<input type="file" name="file" />
+			@*pozor, na name je zavisle jmeno parametru, cili souboru predavaneho do controlleru. Pokud se parametr jmenuje file, musi i name inputu byt file*@
+			<input type="submit" value="Upload" />
+		</div>
+		<br />
+		<div class="form-group">
+		</div>
+	</form>
+}
+

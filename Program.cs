@@ -16,6 +16,13 @@ if (!string.IsNullOrEmpty(connectionString)) {
 	builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		options.UseSqlServer(connectionString));
 }
+//var connectionString = builder.Configuration.GetConnectionString("AzureDBConnection");
+//if (!string.IsNullOrEmpty(connectionString)) {
+//	builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//		options.UseSqlServer(connectionString));
+//}
+
+
 //if (!string.IsNullOrEmpty(connectionString)) {
 //	builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //		options.UseNpgsql(connectionString));

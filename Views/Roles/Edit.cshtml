@@ -1,20 +1,49 @@
 ﻿@{
 	ViewData["Title"] = "Edit a role";
 }
-@model string
-<div>
-	<h4>Edit a role</h4>
-	<form asp-action="Edit">
-		@*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
-		<div class="form-group">
-			<label for="roleedit"></label>
-			<input type="text" name="roleedit" class="form-control" />
-			@*<span asp-validation-for="FirstName" class="text-danger"></span>*@
-		</div>
-		<hr />
-		<div>
-			<input class="btn btn-sm btn-success" type="submit" value="Update" />
-			<a class="btn btn-sm btn-secondary" asp-controller="roles" asp-action="Index">Cancel</a>
-		</div>
-	</form>
-</div>
+@model RoleEdit
+<h4>Edit Role</h4>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form method="post">
+    <input type="hidden" name="roleName" value="@Model.Role.Name" />
+    <input type="hidden" name="roleId" value="@Model.Role.Id" />
+    <h5>Add To @Model.Role.Name</h5>
+    <table>
+        @if (Model.NonMembers.Count() == 0) {
+            <tr><td colspan="2">All Users Are Members</td></tr>
+        }
+        else {
+            @foreach (AppUser user in Model.NonMembers) {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                        <input type="checkbox" name="AddIds" value="@user.Id">
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <br/>
+    <br/>
+    <h5>Remove From @Model.Role.Name</h5>
+    <table>
+        @if (Model.Members.Count() == 0) {
+            <tr><td colspan="2">No Users Are Members</td></tr>
+        }
+        else {
+            @foreach (AppUser user in Model.Members) {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                        <input type="checkbox" name="DeleteIds" value="@user.Id">
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <hr/>
+    <button type="submit" class="btn btn-sm btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-sm btn-secondary">Cancel</a>
+</form>
+
+

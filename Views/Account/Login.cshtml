@@ -13,12 +13,15 @@
 	</div>
 	<div class="form-group">
 		<label asp-for="Password"></label>
-		<input asp-for="Password" class="form-control" />
+		<input type="password" asp-for="Password" id="password" class="form-control" />
+		<i class="bi bi-eye-slash" id="togglePassword"></i>
 	</div>
+	<br	/>
 	<div class="form-group">
 		<label for="rememberme">Remember me?</label>
 		<input id="rememberme" type="checkbox" asp-for="Remember" />
 	</div>
+	<br />
 	<div class="g-recaptcha" id="recaptcha" data-sitekey="6LfdUHYmAAAAAK0x8p0XXr9Et1WfhR1E9EYyTW1P" data-theme="dark"></div>
 	<input type="hidden" id="recaptchaResponse" name="recaptchaResponse" />
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -27,6 +30,19 @@
 			document.getElementById("recaptchaResponse").value = token;
 			document.getElementById("loginForm").submit();
 		}
+		const togglePassword = document
+			.querySelector('#togglePassword');
+		const password = document.querySelector('#password');
+		togglePassword.addEventListener('click', () => {
+			// Toggle the type attribute using
+			// getAttribure() method
+			const type = password
+				.getAttribute('type') === 'password' ?
+				'text' : 'password';
+			password.setAttribute('type', type);
+			// Toggle the eye and bi-eye icon
+			this.classList.toggle('bi-eye');
+		});
 	</script>
 	<br />
 	<hr />

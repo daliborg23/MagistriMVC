@@ -9,8 +9,10 @@ namespace MagistriMVC.Controllers {
 	[Authorize(Roles = "Admin,Director")]
 	public class RolesController : Controller {
 		private RoleManager<IdentityRole> rolesManager;
-		public RolesController(RoleManager<IdentityRole> rolesManager) {
+		private UserManager<AppUser> userManager; // NAVIC
+		public RolesController(RoleManager<IdentityRole> rolesManager, UserManager<AppUser> userManager) {
 			this.rolesManager = rolesManager;
+			this.userManager = userManager;
 		}
 		public IActionResult Index() {
 			return View(rolesManager.Roles);
@@ -33,21 +35,51 @@ namespace MagistriMVC.Controllers {
 
 		// edit role
 		public async Task<IActionResult> Edit(string id) {
-			var roleToEdit = await rolesManager.FindByIdAsync(id);
+			IdentityRole role = await rolesManager.FindByIdAsync(id);
+			List<AppUser> members = new List<AppUser>();
+			List<AppUser> nonMembers = new List<AppUser>();
 			ViewData["Id"] = id;
 			ViewData["Something"] = rolesManager.GetType();
-			if (roleToEdit == null) {
-				return View("NotFound");
+			foreach (AppUser user in userManager.Users) { 
+				var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+				list.Add(user);
 			}
-			return View(roleToEdit);
+			return View(new RoleEdit { 
+				Role = role,
+				Members = members,
+				NonMembers = nonMembers
+			});
 		}
-		[HttpPost]
-		public async Task<IActionResult> Edit(int id, [Bind("Id, Name")] IdentityRole role) {
-			await rolesManager.UpdateAsync(role);
-			return RedirectToAction("Index");
-		}
+        [HttpPost]
+        public async Task<IActionResult> Edit(RoleModification model) {
+            IdentityResult result;
+            if (ModelState.IsValid) {
+                foreach (string userId in model.AddIds ?? new string[] { }) {
+                    AppUser user = await userManager.FindByIdAsync(userId);
+                    if (user != null) {
+                        result = await userManager.AddToRoleAsync(user, model.RoleName);
+                        if (!result.Succeeded)
+                            Errors(result);
+                    }
+                }
+                foreach (string userId in model.DeleteIds ?? new string[] { }) {
+                    AppUser user = await userManager.FindByIdAsync(userId);
+                    if (user != null) {
+                        result = await userManager.RemoveFromRoleAsync(user,
+                        model.RoleName);
+                        if (!result.Succeeded)
+                            Errors(result);
+                    }
+                }
+            }
+            if (ModelState.IsValid)
+                return RedirectToAction("Index");
+            else
+                return await Edit(model.RoleId);
+        }
 
 
+		//[HttpPost] // funguje i bez
 		public async Task<IActionResult> Delete(string id) {
             IdentityRole role = await rolesManager.FindByIdAsync(id);
             if (role != null) {
